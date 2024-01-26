@@ -1,11 +1,11 @@
-import { Router } from "express";
-import cartModel from "../dao/models/carts.model.js";
+import { Router } from 'express'
+import cartsModel from '../models/carts.model.js'
 export const cartsRouter = Router()
 
 cartsRouter
-    .get('/', async (request, responses)=>{
+    .get('/carts', async (request, responses)=>{
         try {
-            const carts = await cartModel.find({isActive: true})
+            const carts = await cartsModel.find({isActive: true})
             responses.json({
                 status: 'success',
                 result: carts
@@ -14,10 +14,10 @@ cartsRouter
             console.log(error)
         }
     })
-    .post('/', async (request, responses)=>{
+    .post('/carts', async (request, responses)=>{
         try {
             const { body } = request
-            const result = await cartModel.create(body)
+            const result = await cartsModel.create(body)
 
             responses.send({
                 status: 'success',
@@ -27,30 +27,30 @@ cartsRouter
             console.log(error)
         }
     })
-    .get('/:cid', async (request, responses)=>{
+    .get('/carts/:cid', async (request, responses)=>{
         try {
             const { cid } = request.params
-            const cart = await cartModel.findOne({_id: cid})
+            const user = await cartsModel.findOne({_id: cid})
             responses.json({
                 status: 'success',
-                result: cart
+                result: user
             })
         } catch (error) {
             console.log(error)
         }
     })
-    .put('/:cid', async (request, responses)=>{
+    .put('/carts/:cid', async (request, responses)=>{
         try {
-            responses.send('update cart')
+            responses.send('update user')
         } catch (error) {
             console.log(error)
         }
     })
-    .delete('/:cid', async (request, responses)=>{
+    .delete('/carts/:cid', async (request, responses)=>{
         try {
             const {cid} = request.params
-            const result = await cartModel.findByIdAndUpdate({_id:cid}, {isActive: false})
-            responses.send('delete cart')
+            const result = await cartsModel.findByIdAndUpdate({_id:cid}, {isActive: false})
+            responses.send('delete user')
         } catch (error) {
             console.log(error)
         }

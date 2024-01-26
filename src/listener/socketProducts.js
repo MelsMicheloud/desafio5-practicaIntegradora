@@ -1,6 +1,6 @@
-import ProductManager from "../dao/ProductManager.js";
+import ProductManager from "../dao/controllers/mongo/ProductManagerMongo.js";
 import { __dirname } from "../utils.js";
-const pm = new ProductManager(__dirname+'/models/products.json')
+const pm = new ProductManager()
 
 const socketProducts = (socketServer) => {
     socketServer.on("connection",async(socket)=>{

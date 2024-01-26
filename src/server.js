@@ -1,23 +1,27 @@
 import express from 'express'
-import logger from 'morgan'
 import { __dirname } from './utils.js'
 import handlebars from 'express-handlebars'
 import { Server } from 'socket.io'
 
+import productsRouter from './routes/products.routes.js'
+import { cartsRouter } from './routes/carts.routes.js'
+import viewsRouter from './routes/views.routes.js'
 import socketProducts from './listener/socketProducts.js'
-import appRouter from './routes/index.js'
-import { connectDB } from './config/config.js'
+import socketChat from './listener/socketMesagges.js'
+import connectToDB from './dao/config/configServer.js'
 
 const server = express ()
 const PORT = 8080
+connectToDB()
+
 
 server.use(express.static(__dirname+'/public'))
 server.use(express.json())
 server.use(express.urlencoded({extended:true}))
-server.use(logger('dev'))
-connectDB()
 
-server.use(appRouter)
+server.use('/api',cartsRouter)
+server.use('/api', productsRouter)
+server.use('/', viewsRouter)
 
 server.engine('handlebars', handlebars.engine())
 server.set('views', __dirname+'/views')
@@ -29,7 +33,7 @@ const httpServer=server.listen(PORT, ()=>{
         console.log(`Servidor Express Puerto ${PORT}\nAcceder a:`)
         console.log(`\t1). http://localhost:${PORT}/api/products`)
         console.log(`\t2). http://localhost:${PORT}/api/carts`)
-        console.log(`\t3). http://localhost:${PORT}/api/users`)
+        console.log(`\t3). http://localhost:${PORT}/realtimeproducts`)
     }
     catch (err){
         console.log(err)
@@ -38,21 +42,5 @@ const httpServer=server.listen(PORT, ()=>{
 
 const socketServer = new Server(httpServer)
 socketProducts(socketServer)
-
-const io = new Server(httpServer)
-
-let mensajes = []
-
-io.on('connection', socket =>{
-    console.log('cliente conectado')
-    // io.emit('')
-    socket.on('message', data => {
-        console.log(data)
-        mensajes.push(data)
-
-        io.emit('messageLogs', mensajes)
-    })
-    
-})
-
+socketChat(socketServer)
 

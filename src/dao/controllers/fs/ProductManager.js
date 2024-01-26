@@ -1,9 +1,9 @@
 import fs from "fs";
-import { __dirname } from "../utils.js";
+import { __dirname } from "../../../utils.js";
 
 export default class ProductManager {
     constructor() {
-        this.path = __dirname+'/models/products.json'
+        this.path = __dirname+'/dao/database/products.json'
         this.products = []
     }
 

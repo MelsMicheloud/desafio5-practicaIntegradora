@@ -1,7 +1,6 @@
-import { Schema, model } from "mongoose"
+import {Schema, model} from 'mongoose'
 
-const cartSchema = new Schema({
-    id: Number,
+const cartsSchema = new Schema({
     product_name: String,
     price: Number,
     category: String,
@@ -13,4 +12,4 @@ const cartSchema = new Schema({
     }
 })
 
-export default model('carts', cartSchema)
+export default model('carts', cartsSchema)
